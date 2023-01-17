@@ -15,10 +15,9 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('updated_at', 'desc')->get();
         return view('blog.index',
     [
-                'posts' =>  $posts
+                'posts' =>  Post::orderBy('updated_at', 'desc')->get()
     ]);
     }
 
@@ -29,7 +28,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return view('blog.create');
     }
 
     /**
@@ -40,7 +39,31 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'title' => 'required|unique:posts|max:255',
+             'excerpt' => 'required',
+             'body' => 'required',
+             'image' => ['required', 'mimes:jpg,png,jpeg', 'max:5048'],
+             'min_to_read' => 'min:0|max:60'
+        ]);
+        // $post = new Post();
+        // $post->title = $request->title; 
+        // $post->excerpt = $request->excrept;   
+        // $post->body = $request->body;
+        // $post->image_path = 'temporay';
+        // $post->is_published = $request->is_published === 'on';
+        // $post->min_to_read  = $request->min_to_read;  
+        // $post->save();
+        Post::create([
+            'title' => $request->title,
+            'excerpt' => $request->excerpt,
+            'body' => $request->body,
+            'image_path' => $this->storeImage($request),
+            'is_published' => $request->is_published === 'on',
+            'min_to_read' => $request->min_to_read 
+        ]);
+
+        return redirect(route('blog.index'));
     }
 
     /**
@@ -51,9 +74,8 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
         return view('blog.show',[
-            'post' =>  $post,
+            'post' =>  Post::find($id)
         ]);
     }
 
@@ -89,5 +111,10 @@ class PostsController extends Controller
     public function destroy($id)
     {
         //
+    }
+    private function storeImage($request)
+    {
+        $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension();
+        return $request->image->move(public_path('images'), $newImageName);
     }
 }

@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body>
 <div class="w-4/5 mx-auto">
@@ -16,17 +16,32 @@
     </div>
 
 <div class="m-auto pt-20">
+    <div class="pb-8">
+        @if ($errors->any())
+            <div class="bg-red-100 text-white font-bold rounded-t px-4">
+                Something went wrong ...
+                <ul class="border border-t-0 border-red-400 rounded-b bg-red-400 px-4 py-2">
+                    @foreach ($errors->all() as $error)
+                    <li>
+                        {{ $error }}
+                    </li>
+                    @endforeach
+                </ul>
+                
+            </div>
+        @endif
+    </div>
     <form
-        action=""
-        method=""
+        action="{{ route('blog.store') }}"
+        method="POST"
         enctype="multipart/form-data">
-
+        @csrf
         <label for="is_published" class="text-gray-500 text-2xl">
             Is Published
         </label>
         <input
             type="checkbox"
-            class="bg-transparent  border-b-2 inline text-2xl outline-none"
+            class="bg-transparent block border-b-2 inline text-2xl outline-none"
             name="is_published">
 
         <input

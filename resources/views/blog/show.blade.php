@@ -17,10 +17,10 @@
 <body>
     <div class="w-4/5 mx-auto">
         <div class="pt-10">
-            {{-- <a href="{{ URL::previous() }}"
+            <a href="{{ URL::previous() }}"
                class="text-green-500 italic hover:text-green-400 hover:border-b-2 border-green-400 pb-3 transition-all py-20">
                 < Back to previous page
-            </a> --}}
+            </a>
         </div>
 
         <h4 class="text-left sm:text-center text-2xl sm:text-4xl md:text-5xl font-bold text-gray-900 py-10 sm:py-20">
